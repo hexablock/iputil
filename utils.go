@@ -6,8 +6,8 @@ import (
 	"strconv"
 )
 
-// given a advertise and bind address determine the advertise addr or return
-// an error
+// BuildAdvertiseAddr returns the advertise host and port string based on the given
+// advertise and bind addresses or an error
 func BuildAdvertiseAddr(a, b string) (string, string, error) {
 	var addr string
 	if a != "" {
@@ -43,6 +43,8 @@ INVALID_ADDR:
 	return "", "", fmt.Errorf("invalid advertise address: %s", addr)
 }
 
+// SplitHostPort splits a host port string and returns a host string
+// and integer port or an error
 func SplitHostPort(host string) (string, int, error) {
 	host, port, err := net.SplitHostPort(host)
 	if err != nil {
@@ -50,4 +52,10 @@ func SplitHostPort(host string) (string, int, error) {
 	}
 	i, err := strconv.ParseInt(port, 10, 32)
 	return host, int(i), err
+}
+
+// PortFromString returns the port number or an error from the given string
+func PortFromString(port string) (int, error) {
+	i, err := strconv.ParseInt(port, 10, 32)
+	return int(i), err
 }
